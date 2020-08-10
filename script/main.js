@@ -8,9 +8,9 @@ let expenses1 = prompt('ВВедите обязательную статью р�
 let amount1 = +prompt('Во сколько это обойдется?');
 let expenses2 = prompt('ВВедите обязательную статью расходов?');
 let amount2 = +prompt('Во сколько это обойдется?');
-let budgetMonth = amount1 + amount2;
+let budgetMonth = money - (amount1 + amount2);
 let mission = 100000;
-let period = Math.ceil(mission / (Number(money) - budgetMonth)) ;
+let period = Math.ceil(mission / budgetMonth) ;
 let budgetDay = Math.floor(budgetMonth / 30);
 
 
