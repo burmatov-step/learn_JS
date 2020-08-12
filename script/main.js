@@ -2,7 +2,7 @@
 
 
 let isNumber = function (n) {
-    return !isNaN(parseFloat(n)) && isFinite(n)
+    return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
 
@@ -20,7 +20,7 @@ let start = function () {
   do{
     money = prompt("Ваш месячный доход?");
   }
-  while (!isNumber(money))
+  while (!isNumber(money));
 };
 start();
 let expensesAmount = getExpensesMonth();
@@ -34,7 +34,7 @@ let budgetDay = Math.floor(accumulatedMonth / 30);
 
 let showTypeOf = function (data) {
     console.log(data, typeof(data));
-}
+};
 
 showTypeOf(money);
 showTypeOf(income);
@@ -44,7 +44,7 @@ function getExpensesMonth() {
     let sum = 0;
 
     for(let i = 0; i < 2; i++){
-        let num = 0
+        let num = 0;
 
         expenses[i] = prompt("ВВедите обязательную статью расходов?");
 
@@ -56,7 +56,7 @@ function getExpensesMonth() {
     }
 
     return sum;
-};
+}
 
 // let expensesAmount = getExpensesMonth();
 
@@ -70,7 +70,7 @@ function getTargetMonth(mission, accumulatedMonth) {
 
 console.log(addExpenses.toLowerCase().split(", "));
 if (getTargetMonth(mission, accumulatedMonth) < 0) {
-    console.log("Цель не будет достигнута")
+    console.log("Цель не будет достигнута");
 } else{
     console.log("Период достижения цели в месяцах: ", Math.ceil(getTargetMonth(mission, accumulatedMonth)));
 }
@@ -79,15 +79,15 @@ console.log(budgetDay);
 
 let getStatusIncome = function(){
     if (budgetDay > 1200){
-    console.log('У вас высокий уровень дохода')
+    console.log('У вас высокий уровень дохода');
 } else if (budgetDay > 600 && budgetDay <= 1200){
-    console.log('У вас средний уровень дохода')
+    console.log('У вас средний уровень дохода');
 } else if (budgetDay <= 600 && budgetDay > 0) {
-    console.log('К сожалению у вас уровень дохода ниже среднего')
+    console.log('К сожалению у вас уровень дохода ниже среднего');
 } else if (budgetDay <= 0) {
-    console.log('Что то пошло не так')
+    console.log('Что то пошло не так');
 }
-}
+};
 
 getStatusIncome();
 
