@@ -1,11 +1,11 @@
-let collection = document.querySelectorAll(".book");
-let books = document.querySelector(".books");
-let heading = document.querySelectorAll("[target='_blank']");
-let promo = document.querySelector(".adv");
-let list2 = collection[0].querySelectorAll("li");
-let list5 = collection[5].querySelectorAll("li");
-let list6 =collection[2].querySelectorAll('li');
-let newElement = document.createElement('li');
+const collection = document.querySelectorAll(".book"),
+      books = document.querySelector(".books"),
+      heading = document.querySelectorAll("[target='_blank']"),
+      promo = document.querySelector(".adv"),
+      list2 = collection[0].querySelectorAll("li"),
+      list5 = collection[5].querySelectorAll("li"),
+      list6 =collection[2].querySelectorAll('li'),
+      newElement = document.createElement('li');
 books.prepend(collection[1]);
 books.append(collection[2]);
 collection[4].after(collection[3])
