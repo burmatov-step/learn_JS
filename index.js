@@ -71,8 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
       this.getIncExp();
       this.getAddExpInc();
       this.getBudget();
-      this.getCancel();
       this.showResult();
+      this.localcooc();
+      this.getCancel();
     }
 
     getRusSym() {
@@ -118,7 +119,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     getTargetMonth() {
-      return targetAmount.value / this.budgetMonth;
+      let getTarget = targetAmount.value / this.budgetMonth;
+      if (getTarget) {
+        return getTarget;
+      } else {
+        getTarget = 0;
+        return getTarget;
+      }
     }
 
     getStatusIncome() {
@@ -212,8 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-
-
     changePercent() {
       const valueSelect = this.value;
 
@@ -222,10 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
         depositPercent.style.display = "inline-block";
 
         depositPercent.addEventListener("blur", function () {
-          if ((!isNumber(this.value) || this.value < 0 || this.value > 100)) {
+          if (!isNumber(this.value) || this.value < 0 || this.value > 100) {
             alert("Введите процент от 0 до 100");
             started.disabled = true;
-          } else{
+          } else {
             started.disabled = false;
           }
         });
@@ -233,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
         started.disabled = false;
         depositPercent.value = valueSelect;
         depositPercent.style.display = "none";
-
       }
     }
 
@@ -244,6 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.deposit = true;
         depositBank.addEventListener("change", this.changePercent);
       } else {
+        depositPercent.style.display = "none";
         depositBank.style.display = "none";
         depositAmount.style.display = "none";
         depositBank.value = "";
@@ -251,6 +256,119 @@ document.addEventListener("DOMContentLoaded", () => {
         this.deposit = false;
         depositBank.removeEventListener("change", this.changePercent);
       }
+    }
+
+    calcSaveMon() {
+      return budgetMonth.value * periodSelect.value;
+    }
+
+    lll() {
+      if (localStorage.myText) {
+        budgetMonth.value = JSON.parse(localStorage.myText).budgetMonth;
+        budgetDay.value = JSON.parse(localStorage.myText).budgetDay;
+        expensesMonthValue.value = JSON.parse(
+          localStorage.myText
+        ).expensesMonthValue;
+        additionalExpenses.value = JSON.parse(
+          localStorage.myText
+        ).additionalExpenses;
+        additionalValue.value = JSON.parse(localStorage.myText).additionalValue;
+        targetMonth.value = JSON.parse(localStorage.myText).targetVal;
+        incomePeriod.value = JSON.parse(localStorage.myText).incomePeriod;
+        periodSelect.addEventListener("change", () => {
+          incomePeriod.value = this.calcSaveMon();
+          let localPrs = JSON.parse(localStorage.myText);
+          localPrs.incomePeriod = +incomePeriod.value;
+          localStorage.myText = JSON.stringify(localPrs);
+          document.cookie = `incomePeriod=${incomePeriod.value}`;
+        });
+        let inputText = document.querySelectorAll("[type='text']");
+        inputText.forEach((item) => {
+          item.disabled = true;
+        });
+        started.style.display = "none";
+        cancel.style.display = "block";
+      } else {
+        this.showResult();
+      }
+    }
+
+    ravn() {
+      let cooc = document.cookie.split("; ");
+      let coocObj = {};
+      cooc.forEach((item, index, arr) => {
+        if (item.split("=")[1] === "") {
+          coocObj[item.split("=")[0]] = [];
+        } else if (
+          item.split("=")[0] === "additionalExpenses" ||
+          item.split("=")[0] === "additionalValue"
+        ) {
+          coocObj[item.split("=")[0]] = item.split("=")[1].split(",");
+        } else if (item.split("=")[0] === "isLoad") {
+          coocObj[item.split("=")[0]] = item.split("=")[1];
+        } else {
+          coocObj[item.split("=")[0]] = +item.split("=")[1];
+        }
+      });
+
+      let arr1 = new Set();
+      for (let key in coocObj) {
+        arr1.add(JSON.stringify(key) + JSON.stringify(coocObj[key]));
+      }
+
+      let sss = JSON.parse(localStorage.myText);
+
+      let arr = new Set();
+
+      for (let key in sss) {
+        arr.add(JSON.stringify(key) + JSON.stringify(sss[key]));
+      }
+      let lll = new Set([...arr1, ...arr]);
+
+
+      if (lll.size !== (arr.size +1) || lll.size !== arr1.size || coocObj.isLoad !== 'true') {
+
+        this.deleteAllCookies();
+        localStorage.clear()
+        const inputText = document.querySelectorAll("[type='text']");
+        inputText.forEach((item) => {
+          item.value = "";
+          item.disabled = false;
+        });
+        started.style.display = "block";
+        cancel.style.display = "none";
+      }
+    }
+
+    deleteAllCookies() {
+      var cookies = document.cookie.split(";");
+
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    }
+
+    localcooc() {
+
+      let ddd = {
+        budgetMonth: this.budgetMonth,
+        budgetDay: this.budgetDay,
+        expensesMonthValue: this.expensesMonth,
+        additionalValue: this.addincome,
+        additionalExpenses: this.addexpenses,
+        incomePeriod: this.calcSavedMoney(),
+        targetVal: +targetMonth.value,
+      };
+      localStorage.myText = JSON.stringify(ddd);
+
+      for (let key in ddd) {
+        document.cookie = `${key}=${ddd[key]}`;
+      }
+      document.cookie = "isLoad=true";
+
     }
 
     eventListener() {
@@ -262,7 +380,15 @@ document.addEventListener("DOMContentLoaded", () => {
         this.start();
       });
       cancel.addEventListener("click", () => {
-        location.reload();
+        const inputText = document.querySelectorAll("[type='text']");
+        inputText.forEach((item) => {
+          item.value = "";
+          item.disabled = false;
+        });
+        started.style.display = "block";
+        cancel.style.display = "none";
+        delete localStorage.myText;
+        this.deleteAllCookies();
       });
       plusExpenses.addEventListener("click", (e) => {
         this.addIncExpBlock(e);
@@ -290,13 +416,19 @@ document.addEventListener("DOMContentLoaded", () => {
       inputText.forEach((item) => {
         item.disabled = true;
       });
+      let localPrs = JSON.parse(localStorage.myText);
+      localStorage.myText = JSON.stringify(localPrs);
+
     }
   }
 
   const appData = new AppData();
 
   appData.eventListener();
-
+  appData.lll();
+  if(localStorage.myText){
+appData.ravn();
+  }
 
 
 });
