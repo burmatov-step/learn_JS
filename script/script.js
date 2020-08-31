@@ -42,12 +42,12 @@ window.addEventListener("DOMContentLoaded", () => {
     if (getTimeRemaining().timeRemaining > 0) {
       let idInterval = setInterval(updateClock, 1000);
     } else {
-      clearInterval(1)
+      clearInterval(idInterval)
     }
 
   }
 
-  countTimer("05 september 2020");
+  countTimer("01 september 2019");
 
   // setInterval(countTimer, 1000, "01 september 2020");
 });
