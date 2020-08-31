@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", () => {
         timeRemaining = (dateStop - dateNow) / 1000,
         seconds = Math.floor(timeRemaining % 60),
         minutes = Math.floor((timeRemaining / 60) % 60),
-        hours = Math.floor(timeRemaining / 60 / 60) % 24;
+        hours = Math.floor((timeRemaining / 60 / 60));
 
       return {
         timeRemaining,
@@ -47,7 +47,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  countTimer("01 july 2020");
+  countTimer("05 september 2020");
 
   // setInterval(countTimer, 1000, "01 september 2020");
 });
