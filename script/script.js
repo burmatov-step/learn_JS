@@ -52,7 +52,13 @@ window.addEventListener("DOMContentLoaded", () => {
     const btnMenu = document.querySelector(".menu"),
       menu = document.querySelector("menu"),
       closeBtn = document.querySelector(".close-btn"),
-      menuItems = menu.querySelectorAll("ul>li");
+      menuItems = menu.querySelectorAll("ul>li"),
+      serviceBlock = document.querySelector("#service-block"),
+      portfolio = document.querySelector("#portfolio"),
+      calc = document.querySelector("#calc"),
+      command = document.querySelector("#command"),
+      connect = document.querySelector("#connect"),
+      linkMouse = document.querySelector('[href="#service-block"]');
 
     const handlerMenu = () => {
       menu.classList.toggle("active-menu");
@@ -66,10 +72,87 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     menuItems.forEach((item) => {
+      let link = item.querySelector("a");
+
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (link.hash === "#service-block") {
+          let num = serviceBlock.offsetTop;
+          console.log(num);
+          requestAnimationFrame(() => {
+            scroll(num);
+          });
+        }
+        if (link.hash === "#portfolio") {
+          requestAnimationFrame(() => {
+            let num = portfolio.offsetTop;
+            console.log(num);
+            scroll(num);
+          });
+        }
+        if (link.hash === "#calc") {
+          requestAnimationFrame(() => {
+            let num = calc.offsetTop;
+
+            scroll(num);
+          });
+        }
+        if (link.hash === "#command") {
+          requestAnimationFrame(() => {
+            let num = command.offsetTop;
+
+            scroll(num);
+          });
+        }
+
+        if (link.hash === "#connect") {
+          requestAnimationFrame(() => {
+            let num = connect.offsetTop;
+            scroll(num);
+          });
+        }
+      });
       item.addEventListener("click", () => {
         handlerMenu();
       });
     });
+
+    //  Функция скроллинга
+    function scroll(end) {
+      let timmer = setTimeout(() => {
+        let aaa = requestAnimationFrame(() => {
+          scroll(end);
+        });
+        if (document.documentElement.scrollTop === end) {
+          cancelAnimationFrame(aaa);
+          clearTimeout(timmer);
+        } else if (
+          end - document.documentElement.scrollTop < 45 &&
+          end - document.documentElement.scrollTop >= 0
+        ) {
+          document.documentElement.scrollTop += 1;
+        } else if (
+          document.documentElement.scrollTop - end < 45 &&
+          document.documentElement.scrollTop - end >= 0
+        ) {
+          document.documentElement.scrollTop -= 1;
+        } else if (document.documentElement.scrollTop > end) {
+          document.documentElement.scrollTop -= 35;
+        } else if (document.documentElement.scrollTop < end) {
+          document.documentElement.scrollTop += 35;
+        }
+      }, 10);
+    }
+
+    // скрол мыши на первом экране
+    linkMouse.addEventListener('click', (e)=>{
+      e.preventDefault()
+      let num = serviceBlock.offsetTop;
+
+      requestAnimationFrame(() => {
+        scroll(num);
+      });
+    })
   };
 
   toggleMenu();
@@ -122,4 +205,3 @@ window.addEventListener("DOMContentLoaded", () => {
   togglePopup();
 });
 
-console.dir(document);
