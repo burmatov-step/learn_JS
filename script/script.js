@@ -25,6 +25,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function updateClock() {
       let timer = getTimeRemaining();
+      let idInterval;
 
       timer.hours < 10
         ? (timerHours.textContent = "0" + timer.hours)
@@ -40,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     if (getTimeRemaining().timeRemaining > 0) {
-      let idInterval = setInterval(updateClock, 1000);
+      idInterval = setInterval(updateClock, 1000);
     } else {
       clearInterval(idInterval);
     }
@@ -145,14 +146,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // скрол мыши на первом экране
-    linkMouse.addEventListener('click', (e)=>{
-      e.preventDefault()
+    linkMouse.addEventListener("click", (e) => {
+      e.preventDefault();
       let num = serviceBlock.offsetTop;
 
       requestAnimationFrame(() => {
         scroll(num);
       });
-    })
+    });
   };
 
   toggleMenu();
@@ -204,4 +205,3 @@ window.addEventListener("DOMContentLoaded", () => {
 
   togglePopup();
 });
-
