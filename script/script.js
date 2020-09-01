@@ -10,7 +10,7 @@ window.addEventListener("DOMContentLoaded", () => {
         timeRemaining = (dateStop - dateNow) / 1000,
         seconds = Math.floor(timeRemaining % 60),
         minutes = Math.floor((timeRemaining / 60) % 60),
-        hours = Math.floor((timeRemaining / 60 / 60));
+        hours = Math.floor(timeRemaining / 60 / 60);
 
       return {
         timeRemaining,
@@ -42,12 +42,84 @@ window.addEventListener("DOMContentLoaded", () => {
     if (getTimeRemaining().timeRemaining > 0) {
       let idInterval = setInterval(updateClock, 1000);
     } else {
-      clearInterval(idInterval)
+      clearInterval(idInterval);
     }
-
   }
 
-  countTimer("01 september 2019");
+  countTimer("09 september 2020");
 
-  // setInterval(countTimer, 1000, "01 september 2020");
+  const toggleMenu = () => {
+    const btnMenu = document.querySelector(".menu"),
+      menu = document.querySelector("menu"),
+      closeBtn = document.querySelector(".close-btn"),
+      menuItems = menu.querySelectorAll("ul>li");
+
+    const handlerMenu = () => {
+      menu.classList.toggle("active-menu");
+    };
+    btnMenu.addEventListener("click", () => {
+      handlerMenu();
+    });
+
+    closeBtn.addEventListener("click", () => {
+      handlerMenu();
+    });
+
+    menuItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        handlerMenu();
+      });
+    });
+  };
+
+  toggleMenu();
+
+  // popup
+
+  const togglePopup = () => {
+    const popup = document.querySelector(".popup"),
+      popupBtn = document.querySelectorAll(".popup-btn"),
+      popupClose = document.querySelector(".popup-close"),
+      popupContent = document.querySelector(".popup-content");
+
+    function transEl() {
+      if (document.documentElement.clientWidth > 768) {
+        popupContent.style.transform = `translateX(-200px)`;
+      } else {
+        popupContent.style.transform = `translateX(-50px)`;
+      }
+    }
+
+    popupBtn.forEach((item) => {
+      item.addEventListener("click", () => {
+        transEl();
+        popup.style.display = "block";
+        let start = Date.now();
+        let timer = setInterval(() => {
+          let timerPassed = Date.now() - start;
+          if (
+            timerPassed >= 500 ||
+            document.documentElement.clientWidth < 768
+          ) {
+            clearInterval(timer);
+            return;
+          }
+          draw(timerPassed);
+        }, 20);
+        function draw(timerPassed) {
+          popupContent.style.transform = `translateX(${
+            -200 + timerPassed / 5
+          }px)`;
+        }
+      });
+    });
+    popupClose.addEventListener("click", () => {
+      transEl();
+      popup.style.display = "none";
+    });
+  };
+
+  togglePopup();
 });
+
+console.dir(document);
