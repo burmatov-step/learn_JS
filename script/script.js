@@ -25,7 +25,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function updateClock() {
       let timer = getTimeRemaining();
-      let idInterval;
 
       timer.hours < 10
         ? (timerHours.textContent = "0" + timer.hours)
@@ -39,6 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
         ? (timerSeconds.textContent = "0" + timer.seconds)
         : (timerSeconds.textContent = timer.seconds);
     }
+    let idInterval;
 
     if (getTimeRemaining().timeRemaining > 0) {
       idInterval = setInterval(updateClock, 1000);
@@ -50,109 +50,72 @@ window.addEventListener("DOMContentLoaded", () => {
   countTimer("09 september 2020");
 
   const toggleMenu = () => {
-    const btnMenu = document.querySelector(".menu"),
-      menu = document.querySelector("menu"),
+    const menu = document.querySelector("menu"),
       closeBtn = document.querySelector(".close-btn"),
-      menuItems = menu.querySelectorAll("ul>li"),
       serviceBlock = document.querySelector("#service-block"),
       portfolio = document.querySelector("#portfolio"),
       calc = document.querySelector("#calc"),
       command = document.querySelector("#command"),
       connect = document.querySelector("#connect"),
-      linkMouse = document.querySelector('[href="#service-block"]');
+      main = document.querySelector("main");
 
     const handlerMenu = () => {
       menu.classList.toggle("active-menu");
     };
-    btnMenu.addEventListener("click", () => {
-      handlerMenu();
-    });
 
-    closeBtn.addEventListener("click", () => {
-      handlerMenu();
-    });
-
-    menuItems.forEach((item) => {
-      let link = item.querySelector("a");
-
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (link.hash === "#service-block") {
-          let num = serviceBlock.offsetTop;
-          console.log(num);
-          requestAnimationFrame(() => {
-            scroll(num);
-          });
-        }
-        if (link.hash === "#portfolio") {
-          requestAnimationFrame(() => {
-            let num = portfolio.offsetTop;
-            console.log(num);
-            scroll(num);
-          });
-        }
-        if (link.hash === "#calc") {
-          requestAnimationFrame(() => {
-            let num = calc.offsetTop;
-
-            scroll(num);
-          });
-        }
-        if (link.hash === "#command") {
-          requestAnimationFrame(() => {
-            let num = command.offsetTop;
-
-            scroll(num);
-          });
-        }
-
-        if (link.hash === "#connect") {
-          requestAnimationFrame(() => {
-            let num = connect.offsetTop;
-            scroll(num);
-          });
-        }
-      });
-      item.addEventListener("click", () => {
-        handlerMenu();
-      });
-    });
 
     //  Функция скроллинга
-    function scroll(end) {
-      let timmer = setTimeout(() => {
-        let aaa = requestAnimationFrame(() => {
-          scroll(end);
-        });
-        if (document.documentElement.scrollTop === end) {
-          cancelAnimationFrame(aaa);
-          clearTimeout(timmer);
-        } else if (
-          end - document.documentElement.scrollTop < 45 &&
-          end - document.documentElement.scrollTop >= 0
-        ) {
-          document.documentElement.scrollTop += 1;
-        } else if (
-          document.documentElement.scrollTop - end < 45 &&
-          document.documentElement.scrollTop - end >= 0
-        ) {
-          document.documentElement.scrollTop -= 1;
-        } else if (document.documentElement.scrollTop > end) {
-          document.documentElement.scrollTop -= 35;
-        } else if (document.documentElement.scrollTop < end) {
-          document.documentElement.scrollTop += 35;
-        }
-      }, 10);
+    function scrollTo(elem) {
+      window.scroll({
+        left: 0,
+        top: elem.offsetTop,
+        behavior: "smooth",
+      });
     }
 
-    // скрол мыши на первом экране
-    linkMouse.addEventListener("click", (e) => {
-      e.preventDefault();
-      let num = serviceBlock.offsetTop;
+    menu.addEventListener("click", (e) => {
+      console.log(e.target === closeBtn);
+      let target = e.target;
+      if (target.closest('li')) {
+        e.preventDefault();
+        handlerMenu();
+      }
+      if (target === closeBtn) {
+        handlerMenu();
+      }
 
-      requestAnimationFrame(() => {
-        scroll(num);
-      });
+      if (target.hash === "#service-block") {
+        let num = serviceBlock;
+        scrollTo(num);
+      }
+      if (target.hash === "#portfolio") {
+        let num = portfolio;
+        scrollTo(num);
+      }
+      if (target.hash === "#calc") {
+        let num = calc;
+        scrollTo(num);
+      }
+      if (target.hash === "#command") {
+        let num = command;
+        scrollTo(num);
+      }
+
+      if (target.hash === "#connect") {
+        let num = connect;
+        scrollTo(num);
+      }
+    });
+
+    main.addEventListener("click", (e) => {
+      let target = e.target;
+      if (target.closest(".menu")) handlerMenu();
+      if (target.closest('[href="#service-block"]')) {
+        e.preventDefault();
+        let num = serviceBlock;
+
+        scrollTo(num);
+      }
     });
   };
 
@@ -165,6 +128,18 @@ window.addEventListener("DOMContentLoaded", () => {
       popupBtn = document.querySelectorAll(".popup-btn"),
       popupClose = document.querySelector(".popup-close"),
       popupContent = document.querySelector(".popup-content");
+
+    popup.addEventListener("click", (event) => {
+      let target = event.target;
+      if (target.classList.contains("popup-close")) {
+        popup.style.display = "none";
+      } else {
+        target = target.closest(".popup-content");
+        if (!target) {
+          popup.style.display = "none";
+        }
+      }
+    });
 
     function transEl() {
       if (document.documentElement.clientWidth > 768) {
@@ -197,11 +172,39 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
     });
-    popupClose.addEventListener("click", () => {
-      transEl();
-      popup.style.display = "none";
-    });
   };
 
   togglePopup();
+
+  // табы
+
+  const tabs = () => {
+    const tabHeader = document.querySelector(".service-header"),
+      tab = tabHeader.querySelectorAll(".service-header-tab"),
+      tabContent = document.querySelectorAll(".service-tab");
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {
+          tab[i].classList.add("active");
+          tabContent[i].classList.remove("d-none");
+        } else {
+          tabContent[i].classList.add("d-none");
+          tab[i].classList.remove("active");
+        }
+      }
+    };
+    tabHeader.addEventListener("click", (event) => {
+      let target = event.target;
+      target = target.closest(".service-header-tab");
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleTabContent(i);
+          }
+        });
+      }
+    });
+  };
+
+  tabs();
 });
