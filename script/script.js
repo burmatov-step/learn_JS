@@ -63,7 +63,6 @@ window.addEventListener("DOMContentLoaded", () => {
       menu.classList.toggle("active-menu");
     };
 
-
     //  Функция скроллинга
     function scrollTo(elem) {
       window.scroll({
@@ -73,17 +72,33 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    menu.addEventListener("click", (e) => {
-      console.log(e.target === closeBtn);
+    document.body.addEventListener("click", (e) => {
       let target = e.target;
-      if (target.closest('li')) {
+      const closeMenu = target.closest("menu");
+
+      // закрытие при клике мимо меню
+      if (menu.classList.contains("active-menu") && !closeMenu) {
+        handlerMenu();
+      }
+      if (target.closest(".menu")) handlerMenu();
+      // скрол на второй блок
+      if (target.closest('[href="#service-block"]')) {
+        e.preventDefault();
+        let num = serviceBlock;
+
+        scrollTo(num);
+      }
+
+      // закрытие при нажатии на пункт меню
+      if (target.closest("li")) {
         e.preventDefault();
         handlerMenu();
       }
+      // закрытие при нажатии на крестик
       if (target === closeBtn) {
         handlerMenu();
       }
-
+      // скролл при клике на пункты в меню
       if (target.hash === "#service-block") {
         let num = serviceBlock;
         scrollTo(num);
@@ -107,16 +122,6 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    main.addEventListener("click", (e) => {
-      let target = e.target;
-      if (target.closest(".menu")) handlerMenu();
-      if (target.closest('[href="#service-block"]')) {
-        e.preventDefault();
-        let num = serviceBlock;
-
-        scrollTo(num);
-      }
-    });
   };
 
   toggleMenu();
