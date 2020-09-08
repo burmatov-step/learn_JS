@@ -380,7 +380,17 @@ window.addEventListener("DOMContentLoaded", () => {
       if(typeValye && squareValue){
         total = price * typeValye * squareValue * countValue * dayValue;
       }
-      totalValue.textContent = total;
+      let count = 0;
+      let interval = setInterval(() => {
+        if (count >= total) {
+          clearInterval(interval)
+          count = Math.floor(total)
+        }
+        totalValue.textContent = count;
+        count +=20
+
+      }, 2);
+      ;
     };
 
     calcBlock.addEventListener("change", (e) => {
