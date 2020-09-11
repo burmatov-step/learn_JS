@@ -414,7 +414,7 @@ window.addEventListener("DOMContentLoaded", () => {
     input2 = form2.querySelectorAll('input');
     const validate = (e) => {
 
-       if (e.target.className === "form-phone") {
+       if (e.target.type === "tel") {
          e.target.value = e.target.value.match(/\+?[0-9]*/);
        } else if (e.target.type !== "email") {
          e.target.value = e.target.value.match(/[а-яА-Я ]*/);
