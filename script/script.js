@@ -405,9 +405,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const sentForm = () => {
     const errorMessage = "Что то пошло не так",
-      loadMessage = "Загрузка...",
       successMesage = "Спасибо! мы скоро с вами свяжемся";
+      let loadMessage = document.createElement('div');
+   loadMessage.id = "cube-loader";
+   loadMessage.innerHTML = `
+    <div class="caption">
+      <div class="cube-loader">
+        <div class="cube loader-1"></div>
+        <div class="cube loader-2"></div>
+        <div class="cube loader-4"></div>
+        <div class="cube loader-3"></div>
+      </div>
+    </div>
 
+    `;
     const form = document.getElementById("form1"),
     form2 = document.getElementById("form2");
     const input1 = form.querySelectorAll('input'),
@@ -435,11 +446,12 @@ window.addEventListener("DOMContentLoaded", () => {
     const statusMessage = document.createElement("div");
 
     form2.addEventListener("submit", (e) => {
+      statusMessage.textContent = '';
       console.log(e)
       e.preventDefault();
       form2.appendChild(statusMessage);
 
-      statusMessage.textContent = loadMessage;
+      statusMessage.appendChild(loadMessage);
       const formData = new FormData(form2);
       let body = {};
       formData.forEach((val, key) => {
@@ -465,10 +477,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
+      statusMessage.textContent = "";
       form.appendChild(statusMessage);
-
-
-      statusMessage.textContent = loadMessage;
+      statusMessage.appendChild(loadMessage);
       const formData = new FormData(form);
       let body = {};
       formData.forEach((val, key) => {
@@ -512,3 +523,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
   sentForm();
 });
+
+let ddd = document.querySelector(".description");
+console.log(ddd)
+let loadMessage = document.createElement("div");
+
+
+    ddd.appendChild(loadMessage)
+
+    console.log(loadMessage);
