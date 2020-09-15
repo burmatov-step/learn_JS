@@ -322,7 +322,6 @@ window.addEventListener("DOMContentLoaded", () => {
     console.log(imgCommand);
     imgCommand.forEach((item) => {
       const images = item.attributes.src.nodeValue;
-      console.dir(item.attributes.src.nodeValue);
       item.addEventListener("mouseenter", (e) => {
         e.target.src = e.target.dataset.img;
       });
@@ -461,7 +460,17 @@ window.addEventListener("DOMContentLoaded", () => {
         statusMessage.textContent = errorMessage;
       };
 
-      postData(body).then(succs).catch(err);
+      postData(body)
+        .then((response) => {
+          if (response.status !== 200) {
+            throw new Error("status network not 200");
+          }
+          succs();
+        })
+        .catch((error) => {
+          console.log(error);
+          err();
+        });
       input2.forEach((e) => {
         e.value = "";
       });
@@ -485,7 +494,17 @@ window.addEventListener("DOMContentLoaded", () => {
         statusMessage.textContent = errorMessage;
       };
 
-      postData(body).then(succs).catch(err);
+      postData(body)
+        .then((response)=>{
+          if(response.status !== 200){
+            throw new Error('status network not 200')
+          }
+          succs()
+        })
+        .catch((error)=>{
+          console.log(error)
+          err()
+        });
 
       input1.forEach((e) => {
         e.value = "";
@@ -493,23 +512,14 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     const postData = (body) => {
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
-        request.addEventListener("readystatechange", () => {
-          if (request.readyState !== 4) {
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
-        });
-        request.open("POST", "server.php");
-        request.setRequestHeader("Content-Type", "aplication/json");
-
-        request.send(JSON.stringify(body));
+      return fetch("server.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "aplication/json",
+        },
+        body: JSON.stringify(body),
       });
+
     };
   };
 
@@ -517,6 +527,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 let ddd = document.querySelector(".description");
-console.log(ddd);
+
 let loadMessage = document.createElement("div");
 ddd.appendChild(loadMessage);
