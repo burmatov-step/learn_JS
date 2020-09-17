@@ -15,7 +15,9 @@ const sentForm = () => {
 
     `;
   const form = document.getElementById("form1"),
-    form2 = document.getElementById("form2");
+    form2 = document.getElementById("form2"),
+    formAll = document.querySelectorAll('form');
+    console.log(formAll);
   const input1 = form.querySelectorAll("input"),
     input2 = form2.querySelectorAll("input");
   const validate = (e) => {
@@ -26,86 +28,58 @@ const sentForm = () => {
     }
   };
 
-  form.addEventListener("input", (e) => {
-    validate(e);
-  });
-
-  form2.addEventListener("input", (e) => {
-    validate(e);
-  });
 
   const statusMessage = document.createElement("div");
 
-  form2.addEventListener("submit", (e) => {
-    statusMessage.textContent = "";
-    console.log(e);
-    e.preventDefault();
-    form2.appendChild(statusMessage);
 
-    statusMessage.appendChild(loadMessage);
-    const formData = new FormData(form2);
-    let body = {};
-    formData.forEach((val, key) => {
-      body[key] = val;
-    });
+  const sentForm = (item, e) =>{
+    const input = item.querySelectorAll("input");
+     statusMessage.textContent = "";
 
-    const succs = () => {
-      statusMessage.textContent = successMesage;
-    };
-    const err = () => {
-      statusMessage.textContent = errorMessage;
-    };
+     e.preventDefault();
+     item.appendChild(statusMessage);
 
-    postData(body)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error("status network not 200");
-        }
-        succs();
-      })
-      .catch((error) => {
-        console.log(error);
-        err();
+     statusMessage.appendChild(loadMessage);
+     const formData = new FormData(item);
+     let body = {};
+     formData.forEach((val, key) => {
+       body[key] = val;
+     });
+
+     const succs = () => {
+       statusMessage.textContent = successMesage;
+     };
+     const err = () => {
+       statusMessage.textContent = errorMessage;
+     };
+
+     postData(body)
+       .then((response) => {
+         if (response.status !== 200) {
+           throw new Error("status network not 200");
+         }
+         succs();
+       })
+       .catch((error) => {
+         console.log(error);
+         err();
+       });
+     input.forEach((e) => {
+       e.value = "";
+     });
+  }
+
+  formAll.forEach((item) => {
+      item.addEventListener("input", (e) => {
+        validate(e);
       });
-    input2.forEach((e) => {
-      e.value = "";
-    });
+      item.addEventListener('submit', (e)=>{
+        sentForm(item, e)
+      })
+
   });
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    statusMessage.textContent = "";
-    form.appendChild(statusMessage);
-    statusMessage.appendChild(loadMessage);
-    const formData = new FormData(form);
-    let body = {};
-    formData.forEach((val, key) => {
-      body[key] = val;
-    });
 
-    const succs = () => {
-      statusMessage.textContent = successMesage;
-    };
-    const err = () => {
-      statusMessage.textContent = errorMessage;
-    };
-
-    postData(body)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error("status network not 200");
-        }
-        succs();
-      })
-      .catch((error) => {
-        console.log(error);
-        err();
-      });
-
-    input1.forEach((e) => {
-      e.value = "";
-    });
-  });
 
   const postData = (body) => {
     return fetch("server.php", {
