@@ -16,9 +16,6 @@ const calc = (price = 100) => {
 
   renderNumber();
 
-calcSquare.attachEvent("onChange", function(){
-  console.log(111);
-});
   const countSum = () => {
     let total = 0,
       countValue = 1,
@@ -46,11 +43,11 @@ calcSquare.attachEvent("onChange", function(){
       }
 
       totalValue.textContent = count;
-      count += 20;
+      count += 300;
     }, 2);
   };
 
-  calcBlock.addEventListener("change", (e) => {
+  calcBlock.addEventListener("input", (e) => {
     const target = e.target;
 
     console.log(target);
