@@ -24,22 +24,18 @@ function countTimer(deadline) {
 
   function updateClock() {
     let timer = getTimeRemaining();
-    firstNum(timer);
+    firstNum(timer.hours, timerHours);
+    firstNum(timer.minutes, timerMinutes);
+    firstNum(timer.seconds, timerSeconds);
   }
 
-  const firstNum = (timer) => {
-    timer.hours < 10
-      ? (timerHours.textContent = "0" + timer.hours)
-      : (timerHours.textContent = timer.hours);
+  const firstNum = (timer, val) =>{
+    timer < 10
+      ? (val.textContent = "0" + timer)
+      : (val.textContent = timer);
+  }
 
-    timer.minutes < 10
-      ? (timerMinutes.textContent = "0" + timer.minutes)
-      : (timerMinutes.textContent = timer.minutes);
 
-    timer.seconds < 10
-      ? (timerSeconds.textContent = "0" + timer.seconds)
-      : (timerSeconds.textContent = timer.seconds);
-  };
 
   let idInterval;
 
