@@ -1,7 +1,8 @@
 function countTimer(deadline) {
   let timerHours = document.querySelector("#timer-hours"),
     timerMinutes = document.querySelector("#timer-minutes"),
-    timerSeconds = document.querySelector("#timer-seconds");
+    timerSeconds = document.querySelector("#timer-seconds"),
+    timeZero = document.querySelectorAll(".time-zero");
 
   function getTimeRemaining() {
     let dateStop = new Date(deadline).getTime(),
@@ -23,19 +24,16 @@ function countTimer(deadline) {
   }
 
   function updateClock() {
-    let timer = getTimeRemaining();
-    firstNum(timer.hours, timerHours);
-    firstNum(timer.minutes, timerMinutes);
-    firstNum(timer.seconds, timerSeconds);
+    let { timeRemaining, ...time } = getTimeRemaining();
+    let count = 0;
+
+    for (let key in time) {
+      time[key] < 10
+        ? (timeZero[count].textContent = "0" + time[key])
+        : (timeZero[count].textContent = time[key]);
+      count++;
+    }
   }
-
-  const firstNum = (timer, val) =>{
-    timer < 10
-      ? (val.textContent = "0" + timer)
-      : (val.textContent = timer);
-  }
-
-
 
   let idInterval;
 
