@@ -48,6 +48,10 @@ body .main .input-cities #select-cities {
   color: #00416A;
 }
 
+body .main .input-cities #select-cities::placeholder{
+  color: #fff;
+}
+
 body .main .input-cities #select-cities:focus ~ .label {
   top: -25px;
   left: 0;
